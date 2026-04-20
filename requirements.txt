@@ -1,0 +1,7 @@
+anthropic>=0.28.0
+requests>=2.31.0
+pyliftover>=0.4
+pydantic>=2.6.0
+lxml>=5.1.0
+python-dotenv>=1.0.0
+tenacity>=8.2.0

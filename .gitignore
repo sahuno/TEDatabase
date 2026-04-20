@@ -1,0 +1,50 @@
+# --- Pipeline intermediates (large or re-generatable) ---
+
+# PDFs — can be hundreds of MB; re-fetchable from PubMed/PMC
+data/raw/papers/
+
+# Raw LLM JSON responses — re-generatable from the cached papers
+data/raw/extractions/
+
+# Transient pipeline state files written during a run
+data/raw/papers_pending.json
+data/raw/papers_to_extract.json
+data/raw/loci_raw.json
+data/raw/loci_lifted.json
+
+# Chain files used for liftOver — large binary assets
+data/seed/*.chain
+data/seed/*.chain.gz
+
+# --- Python artifacts ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# --- Environment / secrets ---
+.env
+.env.*
+# Keep .env.example so contributors know what variables are required
+!.env.example
+
+# --- Ephemeral run logs (CI uploads these as artifacts; not committed) ---
+logs/
+
+# --- JS / Node (for any future site tooling) ---
+node_modules/
+
+# --- OS noise ---
+.DS_Store
+Thumbs.db
+
+# --- Editor swap files ---
+*.swp
+*.swo
+*~

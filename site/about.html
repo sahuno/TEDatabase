@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="About L1-Somatic-DB: methods, data sources, evidence levels, and citation information for the LINE-1 somatic insertion database.">
+  <title>About — L1-Somatic-DB</title>
+
+  <!-- Site CSS -->
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+
+  <!-- ── Site Header ─────────────────────────────────────────────────── -->
+  <header class="site-header" role="banner">
+    <div class="logo" aria-label="L1-Somatic-DB home">
+      L1-<span>Somatic</span>-DB
+    </div>
+    <nav aria-label="Main navigation">
+      <ul class="site-nav">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="browser.html">Genome Browser</a></li>
+        <li><a href="about.html" class="active" aria-current="page">About</a></li>
+        <li><a href="data/loci.json" download>Download</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ── Main Content ────────────────────────────────────────────────── -->
+  <main class="page-container" role="main">
+
+    <h1 class="page-title">About L1-Somatic-DB</h1>
+    <p class="page-subtitle">
+      Last updated: <span id="about-updated">—</span>
+    </p>
+
+    <article class="about-content">
+
+      <!-- ── Overview ─────────────────────────────────────────────────── -->
+      <h2>Overview</h2>
+      <p>
+        <strong>L1-Somatic-DB</strong> is an automated, weekly-updated tracker of somatic LINE-1 (L1)
+        retrotransposon insertions in human tissues and cancers, mapped to the hg38/GRCh38 reference genome.
+        LINE-1 elements are the only autonomously active transposable elements in the human genome.
+        Their somatic mobilization — particularly in cancer — has been implicated in genome instability,
+        oncogene disruption, and tumor suppressor inactivation.
+      </p>
+      <p>
+        The database aggregates insertion coordinates, biological context, validation evidence, and
+        bibliographic provenance from peer-reviewed literature and established community resources.
+        All coordinates are reported in 0-based BED format against hg38.
+      </p>
+
+      <!-- ── Data Sources ──────────────────────────────────────────────── -->
+      <h2>Data Sources</h2>
+      <p>L1-Somatic-DB integrates records from two primary sources:</p>
+      <ul>
+        <li>
+          <strong>PubMed literature (weekly search):</strong> Structured queries against NCBI PubMed
+          retrieve newly indexed articles reporting somatic LINE-1 insertions. Full-text and abstract
+          content is processed to extract genomic coordinates, tissue context, and validation methodology.
+        </li>
+        <li>
+          <strong>L1Base2 (seed database):</strong>
+          <a href="https://l1base.charite.de/" target="_blank" rel="noopener noreferrer">L1Base2</a>
+          provides a curated catalogue of full-length and 5'-truncated human L1 elements with activity
+          annotations. L1Base2 records are used as the seed set for computationally predicted loci and
+          are cross-referenced against literature reports to assign validation levels.
+        </li>
+      </ul>
+
+      <!-- ── Methods ───────────────────────────────────────────────────── -->
+      <h2>Methods and Pipeline</h2>
+      <p>
+        Data collection and processing follow a fully automated weekly pipeline:
+      </p>
+      <ul>
+        <li>
+          <strong>Search:</strong> PubMed is queried weekly using controlled vocabulary terms
+          (LINE-1, L1, somatic retrotransposition, somatic insertion, mobile element, cancer genome)
+          combined with MeSH headings for human studies.
+        </li>
+        <li>
+          <strong>Download and parsing:</strong> Article metadata (title, abstract, journal, year, DOI,
+          PMID) is retrieved via the NCBI Entrez API. Where open-access full text is available, it is
+          fetched via PubMed Central.
+        </li>
+        <li>
+          <strong>LLM-assisted coordinate extraction:</strong> A large language model is prompted to
+          extract genomic locus coordinates, tissue types, cancer types, detection methods, and
+          validation statements from each article. Extracted coordinates are normalised to hg38 using
+          liftOver where the source paper used an older genome build (hg19/GRCh37).
+        </li>
+        <li>
+          <strong>Coordinate validation:</strong> Extracted coordinates are cross-referenced against
+          RepeatMasker LINE-1 annotations to confirm overlap with a known L1 element, and against
+          L1Base2 to check for prior curation. Coordinates that do not overlap any RepeatMasker L1
+          feature are flagged with <em>coordinate_confidence = low</em>.
+        </li>
+        <li>
+          <strong>Weekly update:</strong> New records passing quality filters are appended to the
+          database. Existing records are updated with newly published validation evidence.
+          <code>stats.json</code> is regenerated on each run.
+        </li>
+      </ul>
+
+      <!-- ── Evidence Levels ───────────────────────────────────────────── -->
+      <h2>Evidence Levels</h2>
+      <p>
+        Every locus is assigned one of three validation levels reflecting the strength of evidence
+        for the insertion being a genuine somatic retrotransposition event:
+      </p>
+      <table class="about-table" aria-label="Evidence level definitions">
+        <thead>
+          <tr>
+            <th scope="col">Level</th>
+            <th scope="col">Badge</th>
+            <th scope="col">Criteria</th>
+            <th scope="col">Typical methods</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Experimental</strong></td>
+            <td><span class="chip chip-experimental">experimental</span></td>
+            <td>
+              The insertion has been independently confirmed by a wet-lab assay in the
+              study reporting it. Evidence for somatic origin (absent in matched normal or
+              germline) is documented.
+            </td>
+            <td>PCR validation, Sanger sequencing, long-read validation, Southern blot</td>
+          </tr>
+          <tr>
+            <td><strong>Computational</strong></td>
+            <td><span class="chip chip-computational">computational</span></td>
+            <td>
+              The insertion was detected by a computational pipeline applied to sequencing data
+              (WGS, WES, or RNA-seq) and reported in a peer-reviewed study, but without an
+              independent wet-lab confirmation step.
+            </td>
+            <td>MELT, RetroSeq, TLDR, TraFiC, L1EM, Mobster, nanopore SV callers</td>
+          </tr>
+          <tr>
+            <td><strong>Predicted</strong></td>
+            <td><span class="chip chip-predicted">predicted</span></td>
+            <td>
+              The locus is derived from L1Base2 activity annotations or from LLM-extracted
+              coordinates that could not be independently cross-referenced to a primary source.
+              Treat with caution; coordinates may be approximate.
+            </td>
+            <td>L1Base2 annotation, LLM extraction without cross-reference</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- ── Coordinate Confidence ─────────────────────────────────────── -->
+      <h2>Coordinate Confidence</h2>
+      <p>
+        Separate from the evidence level, <strong>coordinate confidence</strong> reflects the
+        positional precision of the reported insertion site:
+      </p>
+      <ul>
+        <li>
+          <strong style="color:#27ae60;">High</strong> — exact breakpoint resolved to base-pair
+          resolution; coordinates overlap a RepeatMasker LINE-1 feature; liftOver completed
+          successfully if a build conversion was required.
+        </li>
+        <li>
+          <strong style="color:#f39c12;">Medium</strong> — coordinates overlap a RepeatMasker
+          LINE-1 feature but positional precision is limited (e.g., reported as a cytogenetic band
+          or kilobase-resolution window).
+        </li>
+        <li>
+          <strong style="color:#e74c3c;">Low</strong> — coordinates could not be validated against
+          a RepeatMasker feature, liftOver failed or was incomplete, or the original publication did
+          not report a precise genomic position.
+        </li>
+      </ul>
+
+      <!-- ── Genome Build ───────────────────────────────────────────────── -->
+      <h2>Genome Build</h2>
+      <p>
+        All coordinates in L1-Somatic-DB are reported in <strong>hg38 (GRCh38)</strong>, 0-based
+        half-open (BED) format. Coordinates originally reported against hg19/GRCh37 were converted
+        using UCSC liftOver with the hg19ToHg38.over.chain file. Unconverted loci are excluded
+        from the current release.
+      </p>
+
+      <!-- ── Limitations ───────────────────────────────────────────────── -->
+      <h2>Limitations</h2>
+      <ul>
+        <li>
+          LLM-assisted extraction is not error-free. Extracted coordinates from complex figure
+          legends or supplementary tables may be imprecise. Always verify against the primary source
+          before using individual loci for mechanistic studies.
+        </li>
+        <li>
+          Coverage is biased toward cancer types with large published WGS cohorts
+          (colorectal, liver, lung, breast). Rare tumour types and normal tissue insertions are
+          underrepresented.
+        </li>
+        <li>
+          The database captures only insertions reported in indexed PubMed literature and L1Base2.
+          Novel insertions in preprints or conference proceedings are not included until publication.
+        </li>
+      </ul>
+
+      <!-- ── How to Cite ────────────────────────────────────────────────── -->
+      <h2>How to Cite</h2>
+      <p class="about-contact">
+        Please cite this resource as:
+        <br><br>
+        <em>[Citation pending — manuscript in preparation.]</em>
+        <br><br>
+        If you use L1-Somatic-DB in your research before a formal citation is available,
+        please acknowledge it as: <q>L1-Somatic-DB (https://github.com/#, Ahuno et al., in prep)</q>
+        and contact <a href="mailto:ekwame001@gmail.com">ekwame001@gmail.com</a> so we are aware of
+        the usage.
+      </p>
+
+      <!-- ── Contact ───────────────────────────────────────────────────── -->
+      <h2>Contact</h2>
+      <p class="about-contact">
+        Samuel Ahuno<br>
+        Greenbaum Lab, Memorial Sloan Kettering Cancer Center<br>
+        Email: <a href="mailto:ekwame001@gmail.com">ekwame001@gmail.com</a><br>
+        GitHub: <a href="https://github.com/#" target="_blank" rel="noopener noreferrer">github.com/#</a>
+      </p>
+
+    </article>
+
+  </main>
+
+  <!-- ── Footer ──────────────────────────────────────────────────────── -->
+  <footer class="site-footer" role="contentinfo">
+    <p>
+      L1-Somatic-DB &mdash; LINE-1 somatic retrotransposon database for hg38 &nbsp;|&nbsp;
+      <a href="about.html">About &amp; Cite</a> &nbsp;|&nbsp;
+      <a href="https://github.com/#" target="_blank" rel="noopener noreferrer">GitHub</a> &nbsp;|&nbsp;
+      Contact: <a href="mailto:ekwame001@gmail.com">ekwame001@gmail.com</a>
+    </p>
+  </footer>
+
+  <!-- Populate "Last updated" from stats.json -->
+  <script>
+    fetch('data/stats.json')
+      .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+      .then(function (stats) {
+        var el = document.getElementById('about-updated');
+        if (el && stats.last_updated) el.textContent = stats.last_updated;
+      })
+      .catch(function (err) {
+        console.warn('about.html: could not load stats.json', err);
+      });
+  </script>
+
+</body>
+</html>

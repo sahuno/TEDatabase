@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="L1-Somatic-DB: a searchable database of active LINE-1 somatic insertions in humans (hg38).">
+  <title>L1-Somatic-DB — LINE-1 Somatic Insertion Database</title>
+
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
+  <!-- Site CSS -->
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+
+  <!-- ── Site Header ─────────────────────────────────────────────────── -->
+  <header class="site-header" role="banner">
+    <div class="logo" aria-label="L1-Somatic-DB home">
+      L1-<span>Somatic</span>-DB
+    </div>
+    <nav aria-label="Main navigation">
+      <ul class="site-nav">
+        <li><a href="index.html"   class="active" aria-current="page">Home</a></li>
+        <li><a href="browser.html">Genome Browser</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="data/loci.json" download>Download</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ── Main Content ────────────────────────────────────────────────── -->
+  <main class="page-container" role="main">
+
+    <h1 class="page-title">LINE-1 Somatic Insertion Database</h1>
+    <p class="page-subtitle">
+      Curated catalogue of active LINE-1 (L1) somatic retrotransposition events in human tissues and cancers
+      mapped to hg38. Updated weekly from PubMed and L1Base2.
+    </p>
+
+    <!-- ── Stats Banner ──────────────────────────────────────────────── -->
+    <section class="stats-banner" aria-label="Database statistics">
+      <div class="stat-card">
+        <div class="stat-value" id="stat-total" aria-label="Total loci">—</div>
+        <div class="stat-label">Total Loci</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-validated" aria-label="Validated loci">—</div>
+        <div class="stat-label">Validated Loci</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-papers" aria-label="Papers processed">—</div>
+        <div class="stat-label">Papers Processed</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-updated" aria-label="Last updated">—</div>
+        <div class="stat-label">Last Updated</div>
+      </div>
+    </section>
+
+    <!-- ── Filter Bar ─────────────────────────────────────────────────── -->
+    <section class="filter-bar" aria-label="Filter controls">
+
+      <div class="filter-group">
+        <label for="filter-search">Search</label>
+        <input
+          type="text"
+          id="filter-search"
+          placeholder="Gene, tissue, method, PMID…"
+          aria-label="Search all columns"
+          autocomplete="off"
+          spellcheck="false">
+      </div>
+
+      <div class="filter-group">
+        <label for="filter-chrom">Chromosome</label>
+        <select id="filter-chrom" aria-label="Filter by chromosome">
+          <option value="">All</option>
+          <!-- populated dynamically from data -->
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="filter-validation">Validation Level</label>
+        <select id="filter-validation" aria-label="Filter by validation level">
+          <option value="">All</option>
+          <option value="experimental">Experimental</option>
+          <option value="computational">Computational</option>
+          <option value="predicted">Predicted</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="filter-source">Source Type</label>
+        <select id="filter-source" aria-label="Filter by source type">
+          <option value="">All</option>
+          <option value="literature">Literature</option>
+          <option value="l1base2">L1Base2</option>
+          <option value="curated">Curated</option>
+        </select>
+      </div>
+
+      <div class="filter-group year-range">
+        <div>
+          <label>Year Range</label>
+          <div class="year-inputs">
+            <input
+              type="number"
+              id="filter-year-from"
+              placeholder="From"
+              aria-label="Year from"
+              min="1990"
+              max="2100"
+              step="1">
+            <span style="color:#666;font-size:0.85rem">–</span>
+            <input
+              type="number"
+              id="filter-year-to"
+              placeholder="To"
+              aria-label="Year to"
+              min="1990"
+              max="2100"
+              step="1">
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-reset" id="btn-reset" type="button" aria-label="Reset all filters">
+        Reset Filters
+      </button>
+
+    </section>
+
+    <!-- ── Status / Table ─────────────────────────────────────────────── -->
+    <div id="table-status" class="status-message" role="status" aria-live="polite">
+      Loading data…
+    </div>
+
+    <div id="table-wrapper" class="table-wrapper" style="display:none;">
+      <table
+        id="loci-table"
+        class="display"
+        aria-label="LINE-1 somatic loci"
+        role="grid"
+        style="width:100%">
+        <thead>
+          <tr>
+            <th scope="col">Position</th>
+            <th scope="col">Gene</th>
+            <th scope="col">L1 Family</th>
+            <th scope="col">Tissue / Cancer</th>
+            <th scope="col">Validation</th>
+            <th scope="col">Evidence</th>
+            <th scope="col">Samples</th>
+            <th scope="col">Year</th>
+            <th scope="col">PMID</th>
+            <th scope="col">Confidence</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- populated by table.js -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ── Download Section ───────────────────────────────────────────── -->
+    <div class="download-section" aria-label="Download data">
+      <span class="section-label">Download full dataset:</span>
+      <a class="btn-download" href="data/loci.tsv" download aria-label="Download TSV file">
+        Download TSV
+      </a>
+      <a class="btn-download" href="data/loci_hg38.bed" download aria-label="Download BED file">
+        Download BED (hg38)
+      </a>
+    </div>
+
+  </main>
+
+  <!-- ── Footer ──────────────────────────────────────────────────────── -->
+  <footer class="site-footer" role="contentinfo">
+    <p>
+      L1-Somatic-DB &mdash; LINE-1 somatic retrotransposon database for hg38 &nbsp;|&nbsp;
+      <a href="about.html">About &amp; Cite</a> &nbsp;|&nbsp;
+      <a href="https://github.com/#" target="_blank" rel="noopener noreferrer">GitHub</a> &nbsp;|&nbsp;
+      Contact: <a href="mailto:ekwame001@gmail.com">ekwame001@gmail.com</a>
+    </p>
+  </footer>
+
+  <!-- ── Scripts ─────────────────────────────────────────────────────── -->
+  <!-- jQuery (required by DataTables) -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+          integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+          crossorigin="anonymous"></script>
+  <!-- DataTables -->
+  <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
+  <!-- Site logic -->
+  <script src="assets/js/table.js" defer></script>
+
+</body>
+</html>

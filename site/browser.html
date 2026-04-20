@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="L1-Somatic-DB genome browser — interactive visualization of LINE-1 somatic insertions on hg38 using JBrowse2.">
+  <title>Genome Browser — L1-Somatic-DB</title>
+
+  <!-- Site CSS -->
+  <link rel="stylesheet" href="assets/css/main.css">
+
+  <style>
+    /* Browser-page specific overrides */
+    .page-container {
+      padding-bottom: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Site Header ─────────────────────────────────────────────────── -->
+  <header class="site-header" role="banner">
+    <div class="logo" aria-label="L1-Somatic-DB home">
+      L1-<span>Somatic</span>-DB
+    </div>
+    <nav aria-label="Main navigation">
+      <ul class="site-nav">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="browser.html" class="active" aria-current="page">Genome Browser</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="data/loci.json" download>Download</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ── Main Content ────────────────────────────────────────────────── -->
+  <main class="page-container" role="main">
+
+    <h1 class="page-title">Genome Browser</h1>
+
+    <p class="browser-info" role="note">
+      Viewing LINE-1 somatic insertions on hg38. Click a locus in the
+      <a href="index.html">loci table</a> to navigate here, or enter a region
+      directly in the JBrowse2 search box below. Default view:
+      <strong>chr2:131,000,000–132,000,000</strong>.
+    </p>
+
+    <!-- ── JBrowse2 Container ─────────────────────────────────────────── -->
+    <div
+      id="browser-container"
+      class="browser-container"
+      role="region"
+      aria-label="JBrowse2 genome browser">
+      <!-- Placeholder shown while JBrowse2 initializes -->
+      <div class="browser-placeholder">
+        <span>Initializing genome browser…</span>
+        <small>Loading JBrowse2 and hg38 reference data.</small>
+      </div>
+    </div>
+
+    <!-- ── Track Legend ───────────────────────────────────────────────── -->
+    <div style="margin-top:0.75rem;font-size:0.82rem;color:#555;display:flex;gap:1.5rem;flex-wrap:wrap;">
+      <span>
+        <strong style="color:#1a3a5c;">Tracks loaded:</strong>
+      </span>
+      <span>RefSeq Genes (UCSC BigBed)</span>
+      <span style="color:#1a5fa8;font-weight:bold;">L1-Somatic-DB Loci (local BED)</span>
+      <span>RepeatMasker LINE (UCSC BigBed)</span>
+    </div>
+
+  </main>
+
+  <!-- ── Footer ──────────────────────────────────────────────────────── -->
+  <footer class="site-footer" role="contentinfo">
+    <p>
+      L1-Somatic-DB &mdash; LINE-1 somatic retrotransposon database for hg38 &nbsp;|&nbsp;
+      <a href="about.html">About &amp; Cite</a> &nbsp;|&nbsp;
+      <a href="https://github.com/#" target="_blank" rel="noopener noreferrer">GitHub</a> &nbsp;|&nbsp;
+      Contact: <a href="mailto:ekwame001@gmail.com">ekwame001@gmail.com</a>
+    </p>
+  </footer>
+
+  <!-- ── JBrowse2 UMD Scripts ────────────────────────────────────────── -->
+  <!--
+    Load order matters:
+    1. React (peer dep)
+    2. ReactDOM (peer dep)
+    3. JBrowse2 UMD (depends on React/ReactDOM as globals)
+    4. browser.js (our init code)
+  -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"
+          crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"
+          crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@jbrowse/react-linear-genome-view/dist/react-linear-genome-view.umd.development.js"
+          crossorigin="anonymous"></script>
+
+  <!-- Site browser logic -->
+  <script src="assets/js/browser.js" defer></script>
+
+</body>
+</html>
