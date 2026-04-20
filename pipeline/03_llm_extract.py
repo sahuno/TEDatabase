@@ -4,8 +4,6 @@
 
 import argparse
 import base64
-import csv
-import io
 import json
 import logging
 import os
@@ -14,8 +12,10 @@ import time
 from datetime import datetime
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 import anthropic
-import openpyxl
+from pipeline.utils.excel_loci_finder import supplements_to_text
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -327,96 +327,7 @@ def estimate_cost(usage: anthropic.types.Usage, model: str) -> float:
     return input_cost + output_cost
 
 
-# ---------------------------------------------------------------------------
-# Supplement parsing
-# ---------------------------------------------------------------------------
-
-# Max rows to include per sheet/file to keep token count manageable
-MAX_ROWS_PER_SHEET = 2000
-
-
-def _excel_to_text(path: Path, logger: logging.Logger) -> str:
-    """
-    Convert an Excel file to a plain-text CSV-like representation.
-
-    Reads up to MAX_ROWS_PER_SHEET rows per sheet, skipping empty sheets.
-    """
-    try:
-        wb = openpyxl.load_workbook(path, read_only=True, data_only=True)
-        parts: list[str] = []
-        for sheet_name in wb.sheetnames:
-            ws = wb[sheet_name]
-            rows_out: list[str] = []
-            for i, row in enumerate(ws.iter_rows(values_only=True)):
-                if i >= MAX_ROWS_PER_SHEET:
-                    rows_out.append(f"... (truncated at {MAX_ROWS_PER_SHEET} rows)")
-                    break
-                # Skip entirely empty rows
-                if all(c is None for c in row):
-                    continue
-                rows_out.append("\t".join("" if c is None else str(c) for c in row))
-            if rows_out:
-                parts.append(f"=== Sheet: {sheet_name} ===\n" + "\n".join(rows_out))
-        wb.close()
-        return "\n\n".join(parts)
-    except Exception as exc:  # noqa: BLE001
-        logger.warning("Failed to parse Excel %s: %s", path.name, exc)
-        return ""
-
-
-def _tabular_to_text(path: Path, logger: logging.Logger) -> str:
-    """Convert a CSV or TSV file to plain text, capped at MAX_ROWS_PER_SHEET rows."""
-    try:
-        raw = path.read_text(encoding="utf-8", errors="replace")
-        dialect = "excel-tab" if path.suffix.lower() == ".tsv" else "excel"
-        reader = csv.reader(io.StringIO(raw), dialect=dialect)
-        lines: list[str] = []
-        for i, row in enumerate(reader):
-            if i >= MAX_ROWS_PER_SHEET:
-                lines.append(f"... (truncated at {MAX_ROWS_PER_SHEET} rows)")
-                break
-            lines.append("\t".join(row))
-        return "\n".join(lines)
-    except Exception as exc:  # noqa: BLE001
-        logger.warning("Failed to parse tabular file %s: %s", path.name, exc)
-        return ""
-
-
-def supplements_to_text(paths: list[Path], logger: logging.Logger) -> str:
-    """
-    Convert a list of supplement files to a single combined text block.
-
-    Parameters
-    ----------
-    paths : list[Path]
-        Supplement file paths (xlsx, xls, csv, tsv, txt).
-    logger : logging.Logger
-        Logger instance.
-
-    Returns
-    -------
-    str
-        Combined text suitable for inclusion in a Claude message.
-        Empty string if no usable content found.
-    """
-    sections: list[str] = []
-    for p in paths:
-        ext = p.suffix.lower()
-        if ext in {".xlsx", ".xls"}:
-            text = _excel_to_text(p, logger)
-        elif ext in {".csv", ".tsv"}:
-            text = _tabular_to_text(p, logger)
-        elif ext == ".txt":
-            try:
-                text = p.read_text(encoding="utf-8", errors="replace")[:50_000]
-            except Exception as exc:  # noqa: BLE001
-                logger.warning("Failed to read txt %s: %s", p.name, exc)
-                text = ""
-        else:
-            continue
-        if text.strip():
-            sections.append(f"--- Supplementary file: {p.name} ---\n{text.strip()}")
-    return "\n\n".join(sections)
+# supplements_to_text is imported from pipeline.utils.excel_loci_finder
 
 
 # ---------------------------------------------------------------------------
