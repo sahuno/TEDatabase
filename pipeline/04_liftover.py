@@ -14,6 +14,8 @@ import urllib.request
 from datetime import datetime
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 # ---------------------------------------------------------------------------
 # Chain file URLs
 # ---------------------------------------------------------------------------

@@ -14,6 +14,9 @@ from datetime import date, datetime
 from pathlib import Path
 from typing import Iterator
 
+# Make the project root importable so `pipeline.utils` resolves when run as a script
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 # ---------------------------------------------------------------------------
 # L1Base2 BED file sources
 # ---------------------------------------------------------------------------
