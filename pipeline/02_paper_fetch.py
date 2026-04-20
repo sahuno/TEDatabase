@@ -3,10 +3,13 @@
 # Purpose: Download PDFs for LINE-1 papers via PMC OA API and Unpaywall, build extraction manifest
 
 import argparse
+import io
 import json
 import logging
 import sys
+import tarfile
 import time
+import urllib.request
 import xml.etree.ElementTree as ET
 from datetime import datetime
 from pathlib import Path
@@ -31,6 +34,11 @@ UNPAYWALL_URL = "https://api.unpaywall.org/v2/{doi}?email={email}"
 PMC_INTERVAL = 0.4
 UNPAYWALL_INTERVAL = 0.5
 DOWNLOAD_CHUNK_SIZE = 65536  # 64 KB
+
+# Supplementary file extensions worth extracting for LLM parsing
+SUPPLEMENT_EXTS = {".xlsx", ".xls", ".csv", ".tsv", ".txt"}
+# Skip these even if extension matches — they're not data tables
+SUPPLEMENT_SKIP_PATTERNS = {"readme", "license", "manifest", "checksums"}
 
 
 # ---------------------------------------------------------------------------
@@ -144,7 +152,11 @@ def try_pmc_pdf(pmcid: str, papers_dir: Path,
             return None
 
         out_path = papers_dir / f"{pmcid}.pdf"
-        _download_pdf(pdf_url, out_path, session, logger)
+        # PMC may return ftp:// URLs — use urllib which handles both ftp and http
+        if pdf_url.startswith("ftp://"):
+            _download_url_urllib(pdf_url, out_path, logger)
+        else:
+            _download_pdf(pdf_url, out_path, session, logger)
         return out_path
 
     except ET.ParseError as exc:
@@ -209,6 +221,15 @@ def try_unpaywall_pdf(doi: str, pmid: str, papers_dir: Path,
         return None
 
 
+def _download_url_urllib(url: str, out_path: Path, logger: logging.Logger) -> None:
+    """Download any URL (including ftp://) using urllib."""
+    logger.debug("Downloading via urllib: %s -> %s", url, out_path)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    with urllib.request.urlopen(url, timeout=120) as resp:
+        out_path.write_bytes(resp.read())
+    logger.debug("Saved: %s (%.1f KB)", out_path, out_path.stat().st_size / 1024)
+
+
 def _download_pdf(url: str, out_path: Path,
                   session: RateLimitedSession, logger: logging.Logger) -> None:
     """
@@ -252,6 +273,112 @@ def _download_pdf(url: str, out_path: Path,
 
 
 # ---------------------------------------------------------------------------
+# Supplementary file acquisition
+# ---------------------------------------------------------------------------
+
+def try_pmc_supplements(
+    pmcid: str,
+    supplements_dir: Path,
+    session: RateLimitedSession,
+    logger: logging.Logger,
+) -> list[Path]:
+    """
+    Download and extract supplementary data files from PMC OA tgz bundle.
+
+    Parameters
+    ----------
+    pmcid : str
+        PubMed Central ID (e.g. 'PMC1234567').
+    supplements_dir : Path
+        Root directory; files are saved under supplements_dir/{pmcid}/.
+    session : RateLimitedSession
+        Shared HTTP session.
+    logger : logging.Logger
+        Logger instance.
+
+    Returns
+    -------
+    list[Path]
+        Paths to extracted supplement files (xlsx, csv, tsv, txt only).
+    """
+    try:
+        resp = session.get(PMC_OA_URL, params={"id": pmcid, "format": "tgz"})
+        root = ET.fromstring(resp.text)
+
+        error_el = root.find(".//error")
+        if error_el is not None:
+            logger.debug("PMC OA tgz not available for %s: %s", pmcid, error_el.text)
+            return []
+
+        tgz_url: str | None = None
+        for link in root.findall(".//link"):
+            if link.get("format") == "tgz":
+                tgz_url = link.get("href")
+                break
+
+        if not tgz_url:
+            logger.debug("No tgz link in PMC OA response for %s", pmcid)
+            return []
+
+        # Download tgz into memory — PMC returns ftp:// URLs, use urllib (handles both ftp+http)
+        logger.debug("Downloading tgz for %s from %s", pmcid, tgz_url)
+        buf = io.BytesIO()
+        with urllib.request.urlopen(tgz_url, timeout=120) as resp:
+            while True:
+                chunk = resp.read(DOWNLOAD_CHUNK_SIZE)
+                if not chunk:
+                    break
+                buf.write(chunk)
+        buf.seek(0)
+
+        out_dir = supplements_dir / pmcid
+        out_dir.mkdir(parents=True, exist_ok=True)
+
+        saved: list[Path] = []
+        with tarfile.open(fileobj=buf, mode="r:gz") as tar:
+            for member in tar.getmembers():
+                if not member.isfile():
+                    continue
+                p = Path(member.name)
+                ext = p.suffix.lower()
+                if ext not in SUPPLEMENT_EXTS:
+                    continue
+                stem_lower = p.stem.lower()
+                if any(skip in stem_lower for skip in SUPPLEMENT_SKIP_PATTERNS):
+                    continue
+                out_path = out_dir / p.name
+                fobj = tar.extractfile(member)
+                if fobj is None:
+                    continue
+                out_path.write_bytes(fobj.read())
+                saved.append(out_path)
+                logger.debug("Extracted supplement: %s (%.1f KB)", out_path.name, out_path.stat().st_size / 1024)
+
+        if saved:
+            logger.info(
+                "PMC tgz %s: extracted %d supplement file(s): %s",
+                pmcid, len(saved), [p.name for p in saved],
+            )
+        else:
+            logger.debug("PMC tgz %s: no tabular supplements found in archive", pmcid)
+
+        return saved
+
+    except ET.ParseError as exc:
+        logger.warning("PMC OA tgz XML parse error for %s: %s", pmcid, exc)
+        return []
+    except tarfile.TarError as exc:
+        logger.warning("PMC tgz extraction error for %s: %s", pmcid, exc)
+        return []
+    except requests.HTTPError as exc:
+        logger.warning("PMC OA tgz HTTP error for %s: %s", pmcid, exc)
+        return []
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("PMC tgz unexpected error for %s: %s", pmcid, exc)
+        return []
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -276,6 +403,12 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         default=Path("data/raw/papers"),
         help="Directory to store downloaded PDFs (default: data/raw/papers).",
+    )
+    parser.add_argument(
+        "--supplements_dir",
+        type=Path,
+        default=Path("data/raw/supplements"),
+        help="Directory to store extracted supplement files (default: data/raw/supplements).",
     )
     parser.add_argument(
         "--max_papers",
@@ -306,6 +439,7 @@ def main() -> None:
     logger.info("Input        : %s", args.input.resolve())
     logger.info("Output       : %s", args.output.resolve())
     logger.info("Papers dir   : %s", args.papers_dir.resolve())
+    logger.info("Supplements  : %s", args.supplements_dir.resolve())
 
     # Load input
     if not args.input.exists():
@@ -328,6 +462,7 @@ def main() -> None:
         return
 
     args.papers_dir.mkdir(parents=True, exist_ok=True)
+    args.supplements_dir.mkdir(parents=True, exist_ok=True)
 
     # Two sessions with different rate limits
     pmc_session = RateLimitedSession(PMC_INTERVAL)
@@ -336,6 +471,7 @@ def main() -> None:
     manifest: list[dict] = []
     n_pdf_downloaded = 0
     n_abstract_only = 0
+    n_supplements_found = 0
 
     for idx, paper in enumerate(papers, start=1):
         pmid = paper.get("pmid", "")
@@ -349,13 +485,13 @@ def main() -> None:
 
         pdf_path: Path | None = None
 
-        # Strategy 1: PMC OA
+        # Strategy 1: PMC OA PDF
         if pmcid:
             pdf_path = try_pmc_pdf(pmcid, args.papers_dir, pmc_session, logger)
             if pdf_path:
                 logger.info("[%d/%d] PDF via PMC OA: %s", idx, len(papers), pdf_path.name)
 
-        # Strategy 2: Unpaywall
+        # Strategy 2: Unpaywall PDF
         if pdf_path is None and doi:
             pdf_path = try_unpaywall_pdf(doi, pmid, args.papers_dir, unp_session, logger)
             if pdf_path:
@@ -369,6 +505,18 @@ def main() -> None:
                 "[%d/%d] No PDF available for PMID=%s — abstract only", idx, len(papers), pmid
             )
 
+        # Strategy 3: PMC tgz supplementary files (always attempted if PMCID present)
+        supplement_paths: list[str] = []
+        if pmcid:
+            supp_files = try_pmc_supplements(pmcid, args.supplements_dir, pmc_session, logger)
+            supplement_paths = [str(p.resolve()) for p in supp_files]
+            if supp_files:
+                n_supplements_found += 1
+                logger.info(
+                    "[%d/%d] Supplements for PMID=%s: %d file(s)",
+                    idx, len(papers), pmid, len(supp_files),
+                )
+
         manifest.append(
             {
                 "pmid": pmid,
@@ -381,14 +529,16 @@ def main() -> None:
                 "abstract": paper.get("abstract", ""),
                 "pdf_path": str(pdf_path.resolve()) if pdf_path else None,
                 "pdf_available": pdf_path is not None,
+                "supplement_paths": supplement_paths,
             }
         )
 
     # Summary
     logger.info("=== PDF Download Summary ===")
-    logger.info("Total papers    : %d", len(papers))
-    logger.info("PDFs downloaded : %d", n_pdf_downloaded)
-    logger.info("Abstract-only   : %d", n_abstract_only)
+    logger.info("Total papers         : %d", len(papers))
+    logger.info("PDFs downloaded      : %d", n_pdf_downloaded)
+    logger.info("Abstract-only        : %d", n_abstract_only)
+    logger.info("Papers w/ supplements: %d", n_supplements_found)
 
     # Save manifest
     args.output.parent.mkdir(parents=True, exist_ok=True)

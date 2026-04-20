@@ -4,6 +4,8 @@
 
 import argparse
 import base64
+import csv
+import io
 import json
 import logging
 import os
@@ -13,6 +15,7 @@ from datetime import datetime
 from pathlib import Path
 
 import anthropic
+import openpyxl
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -325,6 +328,98 @@ def estimate_cost(usage: anthropic.types.Usage, model: str) -> float:
 
 
 # ---------------------------------------------------------------------------
+# Supplement parsing
+# ---------------------------------------------------------------------------
+
+# Max rows to include per sheet/file to keep token count manageable
+MAX_ROWS_PER_SHEET = 2000
+
+
+def _excel_to_text(path: Path, logger: logging.Logger) -> str:
+    """
+    Convert an Excel file to a plain-text CSV-like representation.
+
+    Reads up to MAX_ROWS_PER_SHEET rows per sheet, skipping empty sheets.
+    """
+    try:
+        wb = openpyxl.load_workbook(path, read_only=True, data_only=True)
+        parts: list[str] = []
+        for sheet_name in wb.sheetnames:
+            ws = wb[sheet_name]
+            rows_out: list[str] = []
+            for i, row in enumerate(ws.iter_rows(values_only=True)):
+                if i >= MAX_ROWS_PER_SHEET:
+                    rows_out.append(f"... (truncated at {MAX_ROWS_PER_SHEET} rows)")
+                    break
+                # Skip entirely empty rows
+                if all(c is None for c in row):
+                    continue
+                rows_out.append("\t".join("" if c is None else str(c) for c in row))
+            if rows_out:
+                parts.append(f"=== Sheet: {sheet_name} ===\n" + "\n".join(rows_out))
+        wb.close()
+        return "\n\n".join(parts)
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("Failed to parse Excel %s: %s", path.name, exc)
+        return ""
+
+
+def _tabular_to_text(path: Path, logger: logging.Logger) -> str:
+    """Convert a CSV or TSV file to plain text, capped at MAX_ROWS_PER_SHEET rows."""
+    try:
+        raw = path.read_text(encoding="utf-8", errors="replace")
+        dialect = "excel-tab" if path.suffix.lower() == ".tsv" else "excel"
+        reader = csv.reader(io.StringIO(raw), dialect=dialect)
+        lines: list[str] = []
+        for i, row in enumerate(reader):
+            if i >= MAX_ROWS_PER_SHEET:
+                lines.append(f"... (truncated at {MAX_ROWS_PER_SHEET} rows)")
+                break
+            lines.append("\t".join(row))
+        return "\n".join(lines)
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("Failed to parse tabular file %s: %s", path.name, exc)
+        return ""
+
+
+def supplements_to_text(paths: list[Path], logger: logging.Logger) -> str:
+    """
+    Convert a list of supplement files to a single combined text block.
+
+    Parameters
+    ----------
+    paths : list[Path]
+        Supplement file paths (xlsx, xls, csv, tsv, txt).
+    logger : logging.Logger
+        Logger instance.
+
+    Returns
+    -------
+    str
+        Combined text suitable for inclusion in a Claude message.
+        Empty string if no usable content found.
+    """
+    sections: list[str] = []
+    for p in paths:
+        ext = p.suffix.lower()
+        if ext in {".xlsx", ".xls"}:
+            text = _excel_to_text(p, logger)
+        elif ext in {".csv", ".tsv"}:
+            text = _tabular_to_text(p, logger)
+        elif ext == ".txt":
+            try:
+                text = p.read_text(encoding="utf-8", errors="replace")[:50_000]
+            except Exception as exc:  # noqa: BLE001
+                logger.warning("Failed to read txt %s: %s", p.name, exc)
+                text = ""
+        else:
+            continue
+        if text.strip():
+            sections.append(f"--- Supplementary file: {p.name} ---\n{text.strip()}")
+    return "\n\n".join(sections)
+
+
+# ---------------------------------------------------------------------------
 # Per-paper extraction
 # ---------------------------------------------------------------------------
 
@@ -341,7 +436,8 @@ def process_paper(
     Parameters
     ----------
     paper : dict
-        Paper metadata dict with keys pmid, abstract, pdf_path, pdf_available.
+        Paper metadata dict with keys pmid, abstract, pdf_path, pdf_available,
+        supplement_paths.
     client : anthropic.Anthropic
         Authenticated Anthropic client.
     system_prompt : str
@@ -360,33 +456,78 @@ def process_paper(
     pdf_path_str = paper.get("pdf_path")
     pdf_available = paper.get("pdf_available", False)
     abstract = paper.get("abstract", "")
+    supplement_path_strs: list[str] = paper.get("supplement_paths", [])
 
     system_blocks = _build_system_block(system_prompt)
     total_cost = 0.0
 
-    # Choose content strategy
+    # --- PDF ---
+    pdf_bytes: bytes | None = None
     if pdf_available and pdf_path_str:
         pdf_path = Path(pdf_path_str)
         if pdf_path.exists():
-            model = MODEL_PDF
-            logger.debug("PMID %s: using PDF mode (%s)", pmid, pdf_path.name)
             try:
                 pdf_bytes = pdf_path.read_bytes()
+                logger.debug("PMID %s: loaded PDF (%s)", pmid, pdf_path.name)
             except OSError as exc:
-                logger.warning("PMID %s: cannot read PDF (%s), falling back to abstract", pmid, exc)
-                pdf_bytes = None
+                logger.warning("PMID %s: cannot read PDF (%s), falling back", pmid, exc)
         else:
-            logger.warning("PMID %s: pdf_path recorded but file missing, falling back to abstract", pmid)
-            pdf_bytes = None
-    else:
-        pdf_bytes = None
+            logger.warning("PMID %s: pdf_path recorded but file missing", pmid)
 
+    # --- Supplements ---
+    supp_text = ""
+    if supplement_path_strs:
+        supp_paths = [Path(p) for p in supplement_path_strs if Path(p).exists()]
+        if supp_paths:
+            supp_text = supplements_to_text(supp_paths, logger)
+            if supp_text:
+                logger.info(
+                    "PMID %s: parsed %d supplement file(s) → %d chars",
+                    pmid, len(supp_paths), len(supp_text),
+                )
+
+    # --- Build message and choose model ---
+    # Priority: PDF+supplements > supplements only > abstract only
+    # Use opus whenever we have real document content; haiku for abstract-only
     if pdf_bytes is not None:
-        messages = _build_messages_pdf(pdf_bytes, system_prompt)
         model = MODEL_PDF
+        content: list[dict] = [
+            {
+                "type": "document",
+                "source": {
+                    "type": "base64",
+                    "media_type": "application/pdf",
+                    "data": base64.standard_b64encode(pdf_bytes).decode("ascii"),
+                },
+            },
+        ]
+        if supp_text:
+            content.append({
+                "type": "text",
+                "text": f"SUPPLEMENTARY FILES:\n\n{supp_text}",
+            })
+        content.append({
+            "type": "text",
+            "text": "Extract all somatic LINE-1 insertion loci from this paper and its supplementary data. Return only valid JSON.",
+        })
+        messages = [{"role": "user", "content": content}]
+    elif supp_text:
+        model = MODEL_PDF  # supplements can be large tables — use opus
+        messages = [
+            {
+                "role": "user",
+                "content": (
+                    f"PAPER ABSTRACT:\n{abstract}\n\n"
+                    f"SUPPLEMENTARY FILES:\n\n{supp_text}\n\n"
+                    "Extract all somatic LINE-1 insertion loci with genomic coordinates "
+                    "from the supplementary data above. Return only valid JSON."
+                ),
+            }
+        ]
+        logger.info("PMID %s: using supplements-only mode", pmid)
     else:
-        messages = _build_messages_abstract(abstract)
         model = MODEL_ABSTRACT
+        messages = _build_messages_abstract(abstract)
 
     # First extraction attempt
     try:
