@@ -270,8 +270,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--lookback_days",
         type=int,
-        default=14,
-        help="Number of days to look back for new papers (default: 14).",
+        default=365,
+        help="Number of days to look back for new papers (default: 365).",
     )
     parser.add_argument(
         "--output",
