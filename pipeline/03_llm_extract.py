@@ -475,6 +475,12 @@ def parse_args() -> argparse.Namespace:
         help="Path to extraction prompt file (default: pipeline/prompts/extract_loci.txt).",
     )
     parser.add_argument(
+        "--max_papers",
+        type=int,
+        default=None,
+        help="Cap number of papers to send to Claude (useful for test runs, e.g. --max_papers 5).",
+    )
+    parser.add_argument(
         "--log_dir",
         type=Path,
         default=Path("logs"),
@@ -518,6 +524,10 @@ def main() -> None:
     raw = args.input.read_text(encoding="utf-8")
     papers: list[dict] = json.loads(raw) if raw.strip() else []
     logger.info("Loaded %d papers from %s", len(papers), args.input.resolve())
+
+    if args.max_papers and len(papers) > args.max_papers:
+        logger.info("--max_papers %d: capping from %d papers", args.max_papers, len(papers))
+        papers = papers[: args.max_papers]
 
     if not papers:
         logger.info("No papers to process. Writing empty loci file.")

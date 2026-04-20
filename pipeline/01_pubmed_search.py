@@ -280,6 +280,12 @@ def parse_args() -> argparse.Namespace:
         help="Output JSON path (default: data/raw/papers_pending.json).",
     )
     parser.add_argument(
+        "--max_papers",
+        type=int,
+        default=None,
+        help="Cap number of new papers to process (useful for test runs, e.g. --max_papers 5).",
+    )
+    parser.add_argument(
         "--log_dir",
         type=Path,
         default=Path("logs"),
@@ -337,6 +343,10 @@ def main() -> None:
         len(new_pmids),
         len(all_pmids),
     )
+
+    if args.max_papers and len(new_pmids) > args.max_papers:
+        logger.info("--max_papers %d: capping from %d PMIDs", args.max_papers, len(new_pmids))
+        new_pmids = new_pmids[: args.max_papers]
 
     if not new_pmids:
         logger.info("No new PMIDs found. Nothing to fetch.")
