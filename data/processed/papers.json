@@ -33,7 +33,8 @@
     "year": "2025",
     "abstract": "Transposons are DNA sequences able to move or copy themselves to other genomic locations leading to insertional mutagenesis. Although transposon-derived sequences account for half of the human genome, most elements are no longer transposition competent. Moreover, transposons are normally repressed through epigenetic silencing in healthy adult tissues but become derepressed in several human cancers, with high activity detected in colorectal cancer. Their impact on non-malignant and malignant tissue as well as the differences between somatic and germline retrotransposition remain poorly understood. With new sequencing technologies, including long read sequencing, we can access intricacies of retrotransposition, such as insertion sequence details and nested repeats, that have been previously challenging to characterize. In this study, we investigate somatic and germline retrotransposition by analyzing long read sequencing from 56 colorectal cancers and 112 uterine leiomyomas. We identified 1495 somatic insertions in colorectal samples, while striking lack of insertions was detected in uterine leiomyomas. Our findings highlight differences between somatic and germline events, such as transposon type distribution, insertion length, and target site preference. Leveraging long-read sequencing, we provide an in-depth analysis of the twin-priming phenomenon, detecting it across transposable element types that remain active in humans, including Alus. Additionally, we detect an abundance of germline transposons in repetitive DNA, along with a relationship between replication timing and insertion target site. Our study reveals a stark contrast in somatic transposon activity between colorectal cancers and uterine leiomyomas, and highlights differences between somatic and germline transposition. This suggests potentially different conditions in malignant and non-malignant tissues, as well as in germline and somatic tissues, which could be involved in the transposition process. Long-read sequencing provided important insights into transposon behavior, allowing detailed examination of structural features such as twin priming and nested elements.",
     "pdf_path": "/data1/greenbab/users/ahunos/projects/TEDatabase/data/raw/papers/40264183.pdf",
-    "pdf_available": true
+    "pdf_available": true,
+    "supplement_paths": []
   },
   "40734190": {
     "pmid": "40734190",
@@ -73,7 +74,8 @@
     "year": "2025",
     "abstract": "Retrotransposons (REs) constitute nearly half of the genome and include long terminal repeat (LTR) elements, Long INterspersed Elements (LINE), and Short INterspersed Elements (SINE). REs are typically silenced in somatic tissues via DNA methylation but can be reactivated through DNA hypomethylation, potentially impacting gene regulation. Here, we investigate genome-scale profiles of RE methylation in high-grade serous ovarian carcinoma (HGSOC) and associations with survival among Black women. Methylation levels of LTR, LINE-1, and Alu (type of SINE) in 200 HGSOC tumors were predicted using a random forest approach and clustered using multiple consensus algorithms. Associations between RE methylation clusters and survival were evaluated using Cox proportional hazard regression, adjusting for age, stage, and debulking status. We performed sensitivity analyses restricted to women with late-stage disease and with adjustment for BRCA1/BRCA2 mutations. Two RE methylation clusters were identified. Cluster 1 exhibited a more hypomethylated RE profile (\"Active\"), while Cluster 2 was more hypermethylated (\"Repressed\"). No statistically significant differences in patient or clinical characteristics were observed between clusters. Compared to the Active Cluster, the Repressed Cluster was associated with an increased risk of mortality (HR = 2.41; 95% CI 1.04-5.59) and had a lower proportion of T cells. This association was consistent in sensitivity analyses. A more hypermethylated RE profile was linked to worse survival among Black women with HGSOC, highlighting the potential of RE methylation as a prognostic biomarker. Further research is needed to understand the underlying biological mechanisms and their implications in ovarian cancer biology and treatment.",
     "pdf_path": null,
-    "pdf_available": false
+    "pdf_available": false,
+    "supplement_paths": []
   },
   "40789164": {
     "pmid": "40789164",
@@ -92,7 +94,8 @@
     "year": "2025",
     "abstract": "Reactivation of transposable elements (TEs) in somatic tissues, particularly of LINE-1, is associated with disease by causing gene mutations and DNA damage. Previous work has shown that the PIWI pathway is crucial for TE suppression in the germline. However, the status and function of this pathway is not well characterized in differentiated somatic cells and there is a lack of consensus on the role of the pathway in somatic tumorigenesis. To shed light on this conundrum, we examined the PIWI pathway in colon cancer through combining bioinformatic analyses and cell-based assays. Shifted weighted annotation network (SWAN) analysis revealed that the pathway experiences significant allelic losses in colon cancer and that PIWIL2, the main catalytic component of the pathway responsible for TE silencing, experiences the highest percent deletions. PIWIL2 is downregulated in colon tumors of advanced stage, nodal metastasis, and in certain subtypes, correlating with poor survival, while it is also downregulated in ulcerative colitis, an inflammatory bowel disease that predisposes to colon cancer. PIWIL2 depletion in colon epithelial Caco2 cells leads to increased anchorage-independent growth, decreased levels of TE-targeting non-canonical piRNAs, increased LINE-1 levels and activity, and in DNA damage, altogether highlighting a tumor-suppressing role of PIWIL2 in the colon.",
     "pdf_path": null,
-    "pdf_available": false
+    "pdf_available": false,
+    "supplement_paths": []
   },
   "40905279": {
     "pmid": "40905279",
@@ -120,7 +123,8 @@
     "year": "2025",
     "abstract": "Retroelements in the human genome are silenced via multiple mechanisms, including DNA methylation, to prevent their potential mutagenic effect. Retroelement activity, demonstrated by their expression and somatic retrotransposition events, was shown to be deregulated in multiple tumors but not yet in leukemia. We hypothesized that treatment with hypomethylating agents, commonly used in myelodysplastic syndromes and acute myeloid leukemia, could lead to increased retroelement activity and somatic retrotranspositions, thus contributing to disease progression. To address this hypothesis, we induced the expression of ORF1p protein with hypomethylating agents in DAMI and HL-60 myeloid cell lines. To study whether long-term hypomethylating agent therapy induces somatic retrotranspositions, we analyzed (i) both cell lines treated for 4 weeks, and (ii) sequential samples from 17 patients with myelodysplastic syndrome treated with hypomethylating agents. Using a sensitive next-generation sequencing (NGS)-based method, no retroelement events were identified. To conclude, we show that although hypomethylating agents induce the expression of LINE-1-encoded proteins in myeloid cell lines, de novo somatic retrotransposition events do not arise during the long-term exposure to these agents.",
     "pdf_path": null,
-    "pdf_available": false
+    "pdf_available": false,
+    "supplement_paths": []
   },
   "41159775": {
     "pmid": "41159775",
@@ -136,6 +140,300 @@
     "year": "2025",
     "abstract": "Long interspersed element 1 (LINE1/L1) is a family of non-LTR retrotransposons that is active in mammals and has expanded dramatically to become 17% of the human genome. L1 activity in humans was first discovered as spontaneous insertions resulting in Mendelian disease. In subsequent years, much has been learned about the 2 L1 encoded proteins (ORF1 and ORF2) and host factors involved in transposition. Research describing many aspects of integration has been captured in important review papers. However, we know of no review dedicated to what is perhaps one of the most unusual features of L1, the 5' truncation that removes most of its sequence in 95% of insertions. Many consider this to be a form of host defense. By removing large portions of L1 during integration, 5' truncation has limited L1-mediated expansion of the genome by approximately 5 Gb. In this review, we discuss size distribution of 5' truncations and how this varies depending on the age and subfamily of the element. Of particular value is the recent telomere to telomere assembly of ultra-long sequence reads that document 1 million copies of L1. Studies of L1 integration show that 5' truncation occurs in germ cells, somatic tissues, and cancer cells. In addition, nonhuman primates, rodents, insects, and yeast contain L1 family elements that exhibit 5' truncation. Experiments have identified host factors that restrict transposition activity and have led to compelling proposals for how 5' truncation occurs. The proposed mechanisms and their implications are discussed.",
     "pdf_path": null,
-    "pdf_available": false
+    "pdf_available": false,
+    "supplement_paths": []
+  },
+  "26259033": {
+    "pmid": "26259033",
+    "pmcid": "PMC4005969",
+    "doi": "10.1038/nm.3919",
+    "title": "Retrotransposon insertions in the clonal evolution of pancreatic ductal adenocarcinoma.",
+    "authors": [
+      "Rodić Nemanja",
+      "Steranka Jared P",
+      "Makohon-Moore Alvin",
+      "Moyer Allison",
+      "Shen Peilin"
+    ],
+    "journal": "Nature medicine",
+    "year": 2015,
+    "abstract": "Pancreatic ductal adenocarcinoma (PDAC) is typically diagnosed after the disease has metastasized; it is among the most lethal forms of cancer. We recently described aberrant expression of an open reading frame 1 protein, ORF1p, encoded by long interspersed element-1 (LINE-1; L1) retrotransposon, in PDAC. To test whether LINE-1 expression leads to somatic insertions of this mobile DNA, we used a targeted method to sequence LINE-1 insertion sites in matched PDAC and normal samples. We found evidence of 465 somatic LINE-1 insertions in 20 PDAC genomes, which were absent from corresponding normal samples. In cases in which matched normal tissue, primary PDAC and metastatic disease sites were available, insertions were found in primary and metastatic tissues in differing proportions. Two adenocarcinomas secondarily involving the pancreas, but originating in the stomach and duodenum, acquired insertions with a similar discordance between primary and metastatic sites. Together, our findings show that LINE-1 contributes to the genetic evolution of PDAC and suggest that somatic insertions are acquired discontinuously in gastrointestinal neoplasms.",
+    "pdf_path": null,
+    "pdf_available": false,
+    "supplement_paths": []
+  },
+  "26283398": {
+    "pmid": "26283398",
+    "pmcid": "PMC4568228",
+    "doi": "10.1073/pnas.1502474112",
+    "title": "LINE-1 expression and retrotransposition in Barrett's esophagus and esophageal carcinoma.",
+    "authors": [
+      "Doucet-O'Hare Tara T",
+      "Rodić Nemanja",
+      "Sharma Reema",
+      "Darbari Isha",
+      "Abril Gabriela",
+      "Choi Jungbin A",
+      "Young Ahn Ji",
+      "Cheng Yulan",
+      "Anders Robert A",
+      "Burns Kathleen H",
+      "Meltzer Stephen J",
+      "Kazazian Haig H"
+    ],
+    "journal": "Proceedings of the National Academy of Sciences of the United States of America",
+    "year": "2015",
+    "abstract": "Barrett's esophagus (BE) is a common disease in which the lining of the esophagus transitions from stratified squamous epithelium to metaplastic columnar epithelium that predisposes individuals to developing esophageal adenocarcinoma (EAC). We hypothesized that BE provides a unique environment for increased long-interspersed element 1 (LINE-1 or L1) retrotransposition. To this end, we evaluated 5 patients with benign BE, 5 patients with BE and concomitant EAC, and 10 additional patients with EAC to determine L1 activity in this progressive disease. After L1-seq, we confirmed 118 somatic insertions by PCR in 10 of 20 individuals. We observed clonal amplification of several insertions which appeared to originate in normal esophagus (NE) or BE and were later clonally expanded in BE or in EAC. Additionally, we observed evidence of clonality within the EAC cases; specifically, 22 of 25 EAC-only insertions were present identically in distinct regions available from the same tumor, suggesting that these insertions occurred in the founding tumor cell of these lesions. L1 proteins must be expressed for retrotransposition to occur; therefore, we evaluated the expression of open reading frame 1 protein (ORF1p), a protein encoded by L1, in eight of the EAC cases for which formalin-fixed paraffin embedded tissue was available. With immunohistochemistry, we detected ORF1p in all tumors evaluated. Interestingly, we also observed dim ORF1p immunoreactivity in histologically NE of all patients. In summary, our data show that somatic retrotransposition occurs early in many patients with BE and EAC and indicate that early events occurring even in histologically NE cells may be clonally expanded in esophageal adenocarcinogenesis.",
+    "pdf_path": null,
+    "pdf_available": false,
+    "supplement_paths": []
+  },
+  "26321759": {
+    "pmid": "26321759",
+    "pmcid": "PMC5384359",
+    "doi": "10.2174/1566524015666150831130827",
+    "title": "Activation of LINE-1 Retrotransposon Increases the Risk of Epithelial-Mesenchymal Transition and Metastasis in Epithelial Cancer.",
+    "authors": [
+      "Rangasamy D",
+      "Lenka N",
+      "Ohms S",
+      "Dahlstrom J E",
+      "Blackburn A C",
+      "Board P G"
+    ],
+    "journal": "Current molecular medicine",
+    "year": "2015",
+    "abstract": "Epithelial cancers comprise 80-90% of human cancers. During the process of cancer progression, cells lose their epithelial characteristics and acquire stem-like mesenchymal features that are resistant to chemotherapy. This process, termed the epithelial-mesenchymal transition (EMT), plays a critical role in the development of metastases. Because of the unique migratory and invasive properties of cells undergoing the EMT, therapeutic control of the EMT offers great hope and new opportunities for treating cancer. In recent years, a plethora of genes and noncoding RNAs, including miRNAs, have been linked to the EMT and the acquisition of stem cell-like properties. Despite these advances, questions remain unanswered about the molecular processes underlying such a cellular transition. In this article, we discuss how expression of the normally repressed LINE-1 (or L1) retrotransposons activates the process of EMT and the development of metastases. L1 is rarely expressed in differentiated stem cells or adult somatic tissues. However, its expression is widespread in almost all epithelial cancers and in stem cells in their undifferentiated state, suggesting a link between L1 activity and the proliferative and metastatic behaviour of cancer cells. We present an overview of L1 activity in cancer cells including how genes involved in proliferation, invasive and metastasis are modulated by L1 expression. The role of L1 in the differential expression of the let-7 family of miRNAs (that regulate genes involved in the EMT and metastasis) is also discussed. We also summarize recent novel insights into the role of the L1-encoded reverse transcriptase enzyme in epithelial cell plasticity that suggest it might be a potential therapeutic target that could reverse the EMT and the metastasis-associated stem cell-like properties of cancer cells.",
+    "pdf_path": "/data1/greenbab/users/ahunos/projects/TEDatabase/data/raw/papers/26321759.pdf",
+    "pdf_available": true,
+    "supplement_paths": []
+  },
+  "26716650": {
+    "pmid": "26716650",
+    "pmcid": "PMC4826189",
+    "doi": "10.18632/oncotarget.6767",
+    "title": "Enhanced expression of LINE-1-encoded ORF2 protein in early stages of colon and prostate transformation.",
+    "authors": [
+      "De Luca Chiara",
+      "Guadagni Fiorella",
+      "Sinibaldi-Vallebona Paola",
+      "Sentinelli Steno",
+      "Gallucci Michele",
+      "Hoffmann Andreas",
+      "Schumann Gerald G",
+      "Spadafora Corrado",
+      "Sciamanna Ilaria"
+    ],
+    "journal": "Oncotarget",
+    "year": "2016",
+    "abstract": "LINE-1 (L1) retrotransposons are a source of endogenous reverse transcriptase (RT) activity, which is expressed as part of the L1-encoded ORF2 protein (L1-ORF2p). L1 elements are highly expressed in many cancer types, while being silenced in most differentiated somatic tissues. We previously found that RT inhibition reduces cell proliferation and promotes differentiation in neoplastic cells, indicating that high endogenous RT activity promotes cancer growth. Here we investigate the expression of L1-ORF2p in several human types of cancer.We have developed a highly specific monoclonal antibody (mAb chA1-L1) to study ORF2p expression and localization in human cancer cells and tissues.We uncover new evidence for high levels of L1-ORF2p in transformed cell lines and staged epithelial cancer tissues (colon, prostate, lung and breast) while no or only basal ORF2p expression was detected in non-transformed cells. An in-depth analysis of colon and prostate tissues shows ORF2p expression in preneoplastic stages, namely transitional mucosa and prostate intraepithelial neoplasia (PIN), respectively.Our results show that L1-ORF2p is overexpressed in tumor and in preneoplastic colon and prostate tissues; this latter finding suggests that ORF2p could be considered as a potential early diagnostic biomarker.",
+    "pdf_path": "/data1/greenbab/users/ahunos/projects/TEDatabase/data/raw/papers/26716650.pdf",
+    "pdf_available": true,
+    "supplement_paths": []
+  },
+  "26895046": {
+    "pmid": "26895046",
+    "pmcid": null,
+    "doi": "10.1007/978-1-4939-3372-3_4",
+    "title": "Retrotransposon Capture Sequencing (RC-Seq): A Targeted, High-Throughput Approach to Resolve Somatic L1 Retrotransposition in Humans.",
+    "authors": [
+      "Sanchez-Luque Francisco J",
+      "Richardson Sandra R",
+      "Faulkner Geoffrey J"
+    ],
+    "journal": "Methods in molecular biology (Clifton, N.J.)",
+    "year": "2016",
+    "abstract": "Mobile genetic elements (MGEs) are of critical importance in genomics and developmental biology. Polymorphic and somatic MGE insertions have the potential to impact the phenotype of an individual, depending on their genomic locations and functional consequences. However, the identification of polymorphic and somatic insertions among the plethora of copies residing in the genome presents a formidable technical challenge. Whole genome sequencing has the potential to address this problem; however, its efficacy depends on the abundance of cells carrying the new insertion. Robust detection of somatic insertions present in only a subset of cells within a given sample can also be prohibitively expensive due to a requirement for high sequencing depth. Here, we describe retrotransposon capture sequencing (RC-seq), a sequence capture approach in which Illumina libraries are enriched for fragments containing the 5' and 3' termini of specific MGEs. RC-seq allows the detection of known polymorphic insertions present in an individual, as well as the identification of rare or private germline insertions not previously described. Furthermore, RC-seq can be used to detect and characterize somatic insertions, providing a valuable tool to elucidate the extent and characteristics of MGE activity in healthy tissues and in various disease states.",
+    "pdf_path": null,
+    "pdf_available": false,
+    "supplement_paths": []
+  },
+  "26895047": {
+    "pmid": "26895047",
+    "pmcid": "PMC5340310",
+    "doi": "10.1007/978-1-4939-3372-3_5",
+    "title": "Long Interspersed Element Sequencing (L1-Seq): A Method to Identify Somatic LINE-1 Insertions in the Human Genome.",
+    "authors": [
+      "Doucet Tara T",
+      "Kazazian Haig H"
+    ],
+    "journal": "Methods in molecular biology (Clifton, N.J.)",
+    "year": "2016",
+    "abstract": "L1-seq is a high-throughput sequencing technique which is utilized to identify novel L1 insertions in genomic DNA samples of interest. Using special diagnostic nucleotides unique to the youngest and most active L1 sequence, we can amplify new somatic insertions. This technique has helped to establish the number of L1 insertions present in the general population as well as the variation among individuals with regard to their complement of active L1 elements. More recently, this technique has been employed to assess the level of retrotransposition occurring in various diseases such as cancer. These efforts try to establish a connection between the process of retrotransposition and disease development and/or progression.",
+    "pdf_path": null,
+    "pdf_available": false,
+    "supplement_paths": []
+  },
+  "26895059": {
+    "pmid": "26895059",
+    "pmcid": "PMC5679191",
+    "doi": "10.1007/978-1-4939-3372-3_17",
+    "title": "Immunodetection of Human LINE-1 Expression in Cultured Cells and Human Tissues.",
+    "authors": [
+      "Sharma Reema",
+      "Rodić Nemanja",
+      "Burns Kathleen H",
+      "Taylor Martin S"
+    ],
+    "journal": "Methods in molecular biology (Clifton, N.J.)",
+    "year": "2016",
+    "abstract": "Long interspersed element-1 (LINE-1) is the only active protein-coding retrotransposon in humans. It is not expressed in somatic tissue but is aberrantly expressed in a wide variety of human cancers. ORF1p protein is the most robust indicator of LINE-1 expression; the protein accumulates in large quantities in cellular cytoplasm. Recently, monoclonal antibodies have allowed more complete characterizations of ORF1p expression and indicated potential for developing ORF1p as a clinical biomarker. Here, we describe a mouse monoclonal antibody specific for human LINE-1 ORF1p and its application in immunofluorescence and immunohistochemistry of both cells and human tissues. We also describe detection of tagged LINE-1 ORF2p via immunofluorescence. These general methods may be readily adapted to use with many other proteins and antibodies.",
+    "pdf_path": null,
+    "pdf_available": false,
+    "supplement_paths": []
+  },
+  "27014690": {
+    "pmid": "27014690",
+    "pmcid": "PMC4782638",
+    "doi": "10.3389/fcell.2016.00014",
+    "title": "Post-Transcriptional Control of LINE-1 Retrotransposition by Cellular Host Factors in Somatic Cells.",
+    "authors": [
+      "Pizarro Javier G",
+      "Cristofari Gaël"
+    ],
+    "journal": "Frontiers in cell and developmental biology",
+    "year": "2016",
+    "abstract": "Long INterspersed Element-1 (LINE-1 or L1) retrotransposons form the only autonomously active family of transposable elements in humans. They are expressed and mobile in the germline, in embryonic stem cells and in the early embryo, but are silenced in most somatic tissues. Consistently, they play an important role in individual genome variations through insertional mutagenesis and sequence transduction, which occasionally lead to novel genetic diseases. In addition, they are reactivated in nearly half of the human epithelial cancers, contributing to tumor genome dynamics. The L1 element codes for two proteins, ORF1p and ORF2p, which are essential for its mobility. ORF1p is an RNA-binding protein with nucleic acid chaperone activity and ORF2p possesses endonuclease and reverse transcriptase activities. These proteins and the L1 RNA assemble into a ribonucleoprotein particle (L1 RNP), considered as the core of the retrotransposition machinery. The L1 RNP mediates the synthesis of new L1 copies upon cleavage of the target DNA and reverse transcription of the L1 RNA at the target site. The L1 element takes benefit of cellular host factors to complete its life cycle, however several cellular pathways also limit the cellular accumulation of L1 RNPs and their deleterious activities. Here, we review the known cellular host factors and pathways that regulate positively or negatively L1 retrotransposition at post-transcriptional level, in particular by interacting with the L1 machinery or L1 replication intermediates; and how they contribute to control L1 activity in somatic cells.",
+    "pdf_path": "/data1/greenbab/users/ahunos/projects/TEDatabase/data/raw/papers/27014690.pdf",
+    "pdf_available": true,
+    "supplement_paths": []
+  },
+  "27016617": {
+    "pmid": "27016617",
+    "pmcid": "PMC4866827",
+    "doi": "10.7554/eLife.13926",
+    "title": "Activation of individual L1 retrotransposon instances is restricted to cell-type dependent permissive loci.",
+    "authors": [
+      "Philippe Claude",
+      "Vargas-Landin Dulce B",
+      "Doucet Aurélien J",
+      "van Essen Dominic",
+      "Vera-Otarola Jorge",
+      "Kuciak Monika",
+      "Corbin Antoine",
+      "Nigumann Pilvi",
+      "Cristofari Gaël"
+    ],
+    "journal": "eLife",
+    "year": "2016",
+    "abstract": "LINE-1 (L1) retrotransposons represent approximately one sixth of the human genome, but only the human-specific L1HS-Ta subfamily acts as an endogenous mutagen in modern humans, reshaping both somatic and germline genomes. Due to their high levels of sequence identity and the existence of many polymorphic insertions absent from the reference genome, the transcriptional activation of individual genomic L1HS-Ta copies remains poorly understood. Here we comprehensively mapped fixed and polymorphic L1HS-Ta copies in 12 commonly-used somatic cell lines, and identified transcriptional and epigenetic signatures allowing the unambiguous identification of active L1HS-Ta copies in their genomic context. Strikingly, only a very restricted subset of L1HS-Ta loci - some being polymorphic among individuals - significantly contributes to the bulk of L1 expression, and these loci are differentially regulated among distinct cell lines. Thus, our data support a local model of L1 transcriptional activation in somatic cells, governed by individual-, locus-, and cell-type-specific determinants.",
+    "pdf_path": null,
+    "pdf_available": false,
+    "supplement_paths": []
+  },
+  "27197217": {
+    "pmid": "27197217",
+    "pmcid": "PMC4889970",
+    "doi": "10.1101/gr.201814.115",
+    "title": "A hot L1 retrotransposon evades somatic repression and initiates human colorectal cancer.",
+    "authors": [
+      "Scott Emma C",
+      "Gardner Eugene J",
+      "Masood Ashiq",
+      "Chuang Nelson T",
+      "Vertino Paula M",
+      "Devine Scott E"
+    ],
+    "journal": "Genome research",
+    "year": "2016",
+    "abstract": "Although human LINE-1 (L1) elements are actively mobilized in many cancers, a role for somatic L1 retrotransposition in tumor initiation has not been conclusively demonstrated. Here, we identify a novel somatic L1 insertion in the APC tumor suppressor gene that provided us with a unique opportunity to determine whether such insertions can actually initiate colorectal cancer (CRC), and if so, how this might occur. Our data support a model whereby a hot L1 source element on Chromosome 17 of the patient's genome evaded somatic repression in normal colon tissues and thereby initiated CRC by mutating the APC gene. This insertion worked together with a point mutation in the second APC allele to initiate tumorigenesis through the classic two-hit CRC pathway. We also show that L1 source profiles vary considerably depending on the ancestry of an individual, and that population-specific hot L1 elements represent a novel form of cancer risk.",
+    "pdf_path": "/data1/greenbab/users/ahunos/projects/TEDatabase/data/raw/papers/27197217.pdf",
+    "pdf_available": true,
+    "supplement_paths": []
+  },
+  "32024998": {
+    "pmid": "32024998",
+    "pmcid": "PMC6137996",
+    "doi": "10.1093/bioinformatics/btp324",
+    "title": "Pan-cancer analysis of whole genomes identifies driver rearrangements promoted by LINE-1 retrotransposition.",
+    "authors": [
+      "Rodriguez-Martin Bernardo",
+      "Alvarez Eva G",
+      "Baez-Ortega Adrian",
+      "Zamora Jorge",
+      "Supek Fran"
+    ],
+    "journal": "Nature genetics",
+    "year": 2020,
+    "abstract": "About half of all cancers have somatic integrations of retrotransposons. Here, to characterize their role in oncogenesis, we analyzed the patterns and mechanisms of somatic retrotransposition in 2,954 cancer genomes from 38 histological cancer subtypes within the framework of the Pan-Cancer Analysis of Whole Genomes (PCAWG) project. We identified 19,166 somatically acquired retrotransposition events, which affected 35% of samples and spanned a range of event types. Long interspersed nuclear element (LINE-1; L1 hereafter) insertions emerged as the first most frequent type of somatic structural variation in esophageal adenocarcinoma, and the second most frequent in head-and-neck and colorectal cancers. Aberrant L1 integrations can delete megabase-scale regions of a chromosome, which sometimes leads to the removal of tumor-suppressor genes, and can induce complex translocations and large-scale duplications. Somatic retrotranspositions can also initiate breakage-fusion-bridge cycles, leading to high-level amplification of oncogenes. These observations illuminate a relevant role of L1 retrotransposition in remodeling the cancer genome, with potential implications for the development of human tumors.",
+    "pdf_path": null,
+    "pdf_available": false,
+    "supplement_paths": []
+  },
+  "22968929": {
+    "pmid": "22968929",
+    "pmcid": "PMC169909",
+    "doi": "10.1101/gr.145235.112",
+    "title": "Extensive somatic L1 retrotransposition in colorectal tumors.",
+    "authors": [
+      "Solyom Szilvia",
+      "Ewing Adam D",
+      "Rahrmann Eric P",
+      "Doucet Tara",
+      "Nelson Heather H"
+    ],
+    "journal": "Genome research",
+    "year": 2012,
+    "abstract": "L1 retrotransposons comprise 17% of the human genome and are its only autonomous mobile elements. Although L1-induced insertional mutagenesis causes Mendelian disease, their mutagenic load in cancer has been elusive. Using L1-targeted resequencing of 16 colorectal tumor and matched normal DNAs, we found that certain cancers were excessively mutagenized by human-specific L1s, while no verifiable insertions were present in normal tissues. We confirmed de novo L1 insertions in malignancy by both validating and sequencing 69/107 tumor-specific insertions and retrieving both 5' and 3' junctions for 35. In contrast to germline polymorphic L1s, all insertions were severely 5' truncated. Validated insertion numbers varied from up to 17 in some tumors to none in three others, and correlated with the age of the patients. Numerous genes with a role in tumorigenesis were targeted, including ODZ3, ROBO2, PTPRM, PCM1, and CDH11. Thus, somatic retrotransposition may play an etiologic role in colorectal cancer.",
+    "pdf_path": "/data1/greenbab/users/ahunos/projects/TEDatabase/data/raw/papers/22968929.pdf",
+    "pdf_available": true,
+    "supplement_paths": []
+  },
+  "36944736": {
+    "pmid": "36944736",
+    "pmcid": "PMC10260396",
+    "doi": "10.1038/s41588-023-01319-9",
+    "title": "Author Correction: Pan-cancer analysis of whole genomes identifies driver rearrangements promoted by LINE-1 retrotransposition.",
+    "authors": [
+      "Rodriguez-Martin Bernardo",
+      "Alvarez Eva G",
+      "Baez-Ortega Adrian",
+      "Zamora Jorge",
+      "Supek Fran"
+    ],
+    "journal": "Nature genetics",
+    "year": 2023,
+    "abstract": "",
+    "pdf_path": "/data1/greenbab/users/ahunos/projects/TEDatabase/data/raw/papers/36944736.pdf",
+    "pdf_available": true,
+    "supplement_paths": []
+  },
+  "41747018": {
+    "pmid": "41747018",
+    "pmcid": "",
+    "doi": "10.1126/science.aee4513",
+    "title": "Concurrent L1 retrotransposition events promote reciprocal translocations in human tumorigenesis.",
+    "authors": [
+      "Zumalave Sonia",
+      "Santamarina Martin",
+      "P Espasandín Nuria",
+      "Zamora Jorge",
+      "Garcia-Souto Daniel"
+    ],
+    "journal": "Science (New York, N.Y.)",
+    "year": 2026,
+    "abstract": "LINE-1 (L1) retrotransposition generates somatic genomic variation in human cancer, but short-read sequencing has limited our understanding of its structural consequences and dynamics. Using long-read sequencing, we analyzed 10 tumors with exceptionally high retrotransposition activity, comprising more than 6000 somatic events. We reveal that L1-mediated reciprocal translocations occur frequently, typically driven by two concurrent L1 retrotransposition events on nonhomologous chromosomes. Using an independent tumor cohort spanning low to high L1 activity, we estimate that retrotransposon-mediated rearrangements arise at a frequency of one event per 60 somatic retrotranspositions. Molecular timing analyses indicate that these events arise early in tumorigenesis, establishing L1 activity as an early driver of chromosomal instability. Our findings demonstrate that L1 contributes substantially to cancer genome evolution in certain tumors.",
+    "pdf_path": null,
+    "pdf_available": false,
+    "supplement_paths": []
+  },
+  "28096347": {
+    "pmid": "28096347",
+    "pmcid": "PMC3567441",
+    "doi": "10.1073/pnas.1619797114",
+    "title": "Human transposon insertion profiling: Analysis, visualization and identification of somatic LINE-1 insertions in ovarian cancer.",
+    "authors": [
+      "Tang Zuojian",
+      "Steranka Jared P",
+      "Ma Sisi",
+      "Grivainis Mark",
+      "Rodić Nemanja"
+    ],
+    "journal": "Proceedings of the National Academy of Sciences of the United States of America",
+    "year": 2017,
+    "abstract": "Mammalian genomes are replete with interspersed repeats reflecting the activity of transposable elements. These mobile DNAs are self-propagating, and their continued transposition is a source of both heritable structural variation as well as somatic mutation in human genomes. Tailored approaches to map these sequences are useful to identify insertion alleles. Here, we describe in detail a strategy to amplify and sequence long interspersed element-1 (LINE-1, L1) retrotransposon insertions selectively in the human genome, transposon insertion profiling by next-generation sequencing (TIPseq). We also report the development of a machine-learning-based computational pipeline, TIPseqHunter, to identify insertion sites with high precision and reliability. We demonstrate the utility of this approach to detect somatic retrotransposition events in high-grade ovarian serous carcinoma.",
+    "pdf_path": null,
+    "pdf_available": false,
+    "supplement_paths": []
   }
 }
