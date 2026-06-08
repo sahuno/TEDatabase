@@ -541,5 +541,22 @@
     "pdf_path": null,
     "pdf_available": false,
     "supplement_paths": []
+  },
+  "42219646": {
+    "pmid": "42219646",
+    "pmcid": null,
+    "doi": "10.1016/bs.adgen.2025.11.004",
+    "title": "Transposable elements in human cancer: Regulation, activation, and genomic consequences.",
+    "authors": [
+      "Diaz-Portal Layla",
+      "Sotelo-Fonseca Jesús Emiliano",
+      "Rodriguez-Martin Bernardo"
+    ],
+    "journal": "Advances in genetics",
+    "year": "2026",
+    "abstract": "Transposable elements (TEs) are mobile DNA sequences that have played a central role in shaping the human genome. Among them, LINE-1 (L1) elements are particularly relevant in cancer, as most reported somatic activity originates from them. Under normal circumstances, L1 activity is tightly regulated at multiple stages of its life cycle; however, already early in cancer development, this control can be disrupted by global hypomethylation, TP53 inactivation, and chromatin deregulation, among other factors, allowing L1 elements to become transcriptionally active and mobile. Somatic L1 retrotransposition is particularly abundant in cancers of epithelial origin, most notably in esophageal, head and neck, colorectal, and lung squamous cell carcinomas. The resulting L1 insertions can disrupt genes, alter regulatory landscapes, and generate large chromosomal rearrangements, contributing to genomic instability. Most of these effects are driven by a small subset of highly active \"hot\" L1 elements segregating in the human population. Beyond their mutagenic potential, TE-derived transcripts and proteins can activate innate immune pathways, linking retrotransposon activity to cancer immunity. These tumor-type-specific patterns of L1 activity and their diverse genomic consequences are opening new avenues for leveraging TE activation as a biomarker, actionable therapeutic target, and modulator of the tumor immune microenvironment.",
+    "pdf_path": null,
+    "pdf_available": false,
+    "supplement_paths": []
   }
 }
