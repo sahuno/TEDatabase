@@ -73,8 +73,8 @@
     "journal": "Clinical epigenetics",
     "year": "2025",
     "abstract": "Retrotransposons (REs) constitute nearly half of the genome and include long terminal repeat (LTR) elements, Long INterspersed Elements (LINE), and Short INterspersed Elements (SINE). REs are typically silenced in somatic tissues via DNA methylation but can be reactivated through DNA hypomethylation, potentially impacting gene regulation. Here, we investigate genome-scale profiles of RE methylation in high-grade serous ovarian carcinoma (HGSOC) and associations with survival among Black women. Methylation levels of LTR, LINE-1, and Alu (type of SINE) in 200 HGSOC tumors were predicted using a random forest approach and clustered using multiple consensus algorithms. Associations between RE methylation clusters and survival were evaluated using Cox proportional hazard regression, adjusting for age, stage, and debulking status. We performed sensitivity analyses restricted to women with late-stage disease and with adjustment for BRCA1/BRCA2 mutations. Two RE methylation clusters were identified. Cluster 1 exhibited a more hypomethylated RE profile (\"Active\"), while Cluster 2 was more hypermethylated (\"Repressed\"). No statistically significant differences in patient or clinical characteristics were observed between clusters. Compared to the Active Cluster, the Repressed Cluster was associated with an increased risk of mortality (HR = 2.41; 95% CI 1.04-5.59) and had a lower proportion of T cells. This association was consistent in sensitivity analyses. A more hypermethylated RE profile was linked to worse survival among Black women with HGSOC, highlighting the potential of RE methylation as a prognostic biomarker. Further research is needed to understand the underlying biological mechanisms and their implications in ovarian cancer biology and treatment.",
-    "pdf_path": null,
-    "pdf_available": false,
+    "pdf_path": "/home/runner/work/TEDatabase/TEDatabase/data/raw/papers/40734190.pdf",
+    "pdf_available": true,
     "supplement_paths": []
   },
   "40789164": {
