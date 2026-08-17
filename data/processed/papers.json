@@ -514,8 +514,8 @@
     "journal": "bioRxiv : the preprint server for biology",
     "year": "2026",
     "abstract": "MET exon 14 skipping is a pathogenic event that results in decreased ubiquitin-mediated degradation of the MET receptor, sustained oncogenic signaling, and conferred sensitivity to MET tyrosine kinase inhibitors. While exon 14 skipping is most commonly caused by somatically acquired base substitutions and small indels near the exon 14 splice sites, here we report nine cases in which long interspersed element-1 (LINE-1, L1)-mediated insertions within or adjacent to MET exon 14, including one case of a LINE-1-mediated pseudogene insertion, appear to cause exon 14 skipping. These describe the first recurrent and clinically actionable mutations caused by LINE-1 retrotransposition in cancer.",
-    "pdf_path": null,
-    "pdf_available": false,
+    "pdf_path": "/home/runner/work/TEDatabase/TEDatabase/data/raw/papers/41757089.pdf",
+    "pdf_available": true,
     "supplement_paths": []
   },
   "41767206": {
